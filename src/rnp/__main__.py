@@ -86,9 +86,9 @@ Execute the tool as a module
 
     reconcile_versions_order = [
         candace,
-        # brianna,
-        # ryan,
-        # lenora,
+        brianna,
+        ryan,
+        lenora,
         quality_assurance,
         surrogate,
     ]
@@ -96,7 +96,10 @@ Execute the tool as a module
     create_version_order = [
         surrogate,
         quality_assurance,
-        candace
+        candace,
+        brianna,
+        ryan,
+        lenora,
     ]
 
     if options.action == 'reconcile' or options.action == 'all':
