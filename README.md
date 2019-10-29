@@ -1,4 +1,5 @@
 # reconcile-and-post
+
 cli to reconcile and post versions as well as create them
 
 ## usage
@@ -13,7 +14,6 @@ run the tool as a module
 - `python -m rnp --action=create`
 - `python -m rnp --action=delete`
 - `python -m rnp --action=reconcile`
-
 
 for me in development with a funky db
 
