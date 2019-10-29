@@ -20,6 +20,7 @@ class VersionInfo():
         self.version_name = version_name
         self.trimmed_version = _trim_schema(version_name)
         self.rnp_version_name = rnp_version_name
+        self.trimmed_rnp = None
 
         if rnp_version_name:
             self.trimmed_rnp = _trim_schema(rnp_version_name)
@@ -53,7 +54,7 @@ class VersionInfo():
         arcpy.management.CreateVersion(
             in_workspace=admin_connection,
             parent_version=self.trimmed_version,
-            version_name=self.trimmed_rmp,
+            version_name=self.trimmed_rnp,
             access_permission='PROTECTED')
 
     def delete(self):
