@@ -6,14 +6,10 @@ A module that holds items that may change
 '''
 
 
-VERSION = '1.0.0'
-
+#: path to the connection sde files
 BASE_PATH = 'C:\\GIS\\ArcGISPro\\Projects\\UIC_GDB_Editing\\'
-LOG_PATH = 'C:\\temp'
 
-DBO = 'sde'
-ADMIN_SCHEMA = 'UICADMIN'
-
+#: sde connection names for the users
 CONNECTIONS = {
     'uic_admin': 'Development_DBA_UICADMIN.sde',
     'surrogate': 'Development_DBA_UICADMIN.sde',
@@ -23,3 +19,11 @@ CONNECTIONS = {
     'ryan': 'Development_DBA_RParker.sde',
     'lenora': 'Development_DBA_LenoraS.sde'
 }
+
+#: path where reconcile logs wil be written
+LOG_PATH = 'C:\\temp'
+
+#: you can mostly ignore these
+VERSION = '1.0.0'
+DBO = 'sde'
+ADMIN_SCHEMA = 'UICADMIN'

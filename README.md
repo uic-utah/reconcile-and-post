@@ -5,6 +5,7 @@ cli to reconcile and post versions as well as create them
 ## usage
 
 1. download the project from the link above
+1. edit the `config.py` file with the correct values
 1. open the command line and change directories to the `src` folder within this project
    - `cd c:\dev\reconcile-and-post\src`
 1. activate the arcgis python to get access to arcpy
