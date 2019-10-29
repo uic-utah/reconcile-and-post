@@ -43,45 +43,45 @@ Execute the tool as a module
 
     admin = VersionInfo(
         connection=os.path.join(options.base_path, 'Development_DBA_UICADMIN.sde'),
-        version_name=f'{options.dbo_schema}.DEFAULT',
-        rnp_version_name=None,
+        fully_qualified_version_name=f'{options.dbo_schema}.DEFAULT',
+        fully_qualified_rnp_version_name=None,
         reconciles_into=None,
     )
     surrogate = VersionInfo(
         connection=admin.connection,
-        version_name=f'{options.admin_schema}.UIC_Surrogate_Default',
-        rnp_version_name=None,
-        reconciles_into=admin.version_name,
+        fully_qualified_version_name=f'{options.admin_schema}.UIC_Surrogate_Default',
+        fully_qualified_rnp_version_name=None,
+        reconciles_into=admin.fully_qualified_version_name,
     )
-    qa = VersionInfo(
+    quality_assurance = VersionInfo(
         connection=admin.connection,
-        version_name=f'{options.admin_schema}.UIC_QA',
-        rnp_version_name=None,
-        reconciles_into=surrogate.version_name,
+        fully_qualified_version_name=f'{options.admin_schema}.UIC_QA',
+        fully_qualified_rnp_version_name=None,
+        reconciles_into=surrogate.fully_qualified_version_name,
     )
     brianna = VersionInfo(
         connection=os.path.join(options.base_path, 'Development_DBA_BAriotti.sde'),
-        version_name='UIC_BAriotti',
-        rnp_version_name='UIC_RnP_BAriotti',
-        reconciles_into=qa.version_name,
+        fully_qualified_version_name='BARIOTTI.UIC_BAriotti',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_BAriotti',
+        reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     candace = VersionInfo(
         connection=os.path.join(options.base_path, 'Development_DBA_CCady.sde'),
-        version_name='CCADY.UIC_CCady',
-        rnp_version_name='UIC_RnP_CCady',
-        reconciles_into=qa.version_name,
+        fully_qualified_version_name='CCADY.UIC_CCady',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_CCady',
+        reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     ryan = VersionInfo(
         connection=os.path.join(options.base_path, 'Development_DBA_RParker.sde'),
-        version_name='UIC_RParker',
-        rnp_version_name='UIC_RnP_RParker',
-        reconciles_into=qa.version_name,
+        fully_qualified_version_name='RPARKER.UIC_RParker',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_RParker',
+        reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     lenora = VersionInfo(
         connection=os.path.join(options.base_path, 'Development_DBA_LenoraS.sde'),
-        version_name='UIC_LenoraS',
-        rnp_version_name='UIC_RnP_LenoraS',
-        reconciles_into=qa.version_name,
+        fully_qualified_version_name='LENORAS.UIC_LenoraS',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_LenoraS',
+        reconciles_into=quality_assurance.fully_qualified_version_name,
     )
 
     reconcile_versions_order = [
@@ -89,13 +89,13 @@ Execute the tool as a module
         # brianna,
         # ryan,
         # lenora,
-        qa,
+        quality_assurance,
         surrogate,
     ]
 
     create_version_order = [
         surrogate,
-        qa,
+        quality_assurance,
         candace
     ]
 
@@ -103,7 +103,7 @@ Execute the tool as a module
         reconcile_and_post_versions(reconcile_versions_order, admin.connection, log_path)
 
     if options.action == 'delete' or options.action == 'all':
-        delete_versions(reconcile_versions_order)
+        delete_versions(reconcile_versions_order, admin.connection)
 
     if options.action == 'create' or options.action == 'all':
         create_versions(create_version_order)
@@ -120,15 +120,15 @@ def reconcile_and_post_versions(versions, admin_connection, log_path):
     with arcpy.EnvManager(workspace=admin_connection):
         all_versions = [version.name.lower() for version in arcpy.da.ListVersions(admin_connection)]
 
-        required_versions = [version for version in versions if version.version_name.lower() not in all_versions]
+        required_versions = [version for version in versions if version.fully_qualified_version_name.lower() not in all_versions]
 
         if len(required_versions) > 0:
-            print(f'missing the following required versions: {", ".join([version.version_name for version in required_versions])}')
+            print(f'missing the following required versions: {", ".join([version.fully_qualified_version_name for version in required_versions])}')
 
             return
 
         #: Create RnP versions if they don't exist
-        missing_rnp_versions = [version for version in versions if version.rnp_version_name not in all_versions]
+        missing_rnp_versions = [version for version in versions if version.fully_qualified_rnp_version_name not in all_versions]
 
         for missing_version in missing_rnp_versions:
             missing_version.create_rnp_version(admin_connection)
@@ -139,16 +139,16 @@ def reconcile_and_post_versions(versions, admin_connection, log_path):
 
         arcpy.management.ClearWorkspaceCache(admin_connection)
 
-        print('finished')
+        print(f'finished{os.linesep}')
 
 
-def delete_versions(versions):
+def delete_versions(versions, admin_connection):
     print(f'deleting {len(versions)} versions')
 
     for version in versions:
-        version.delete()
+        version.delete(admin_connection)
 
-    print('finished')
+    print(f'finished{os.linesep}')
 
 
 def create_versions(versions):
@@ -157,7 +157,7 @@ def create_versions(versions):
     for version in versions:
         version.create()
 
-    print('finished')
+    print(f'finished{os.linesep}')
 
 
 if __name__ == '__main__':
