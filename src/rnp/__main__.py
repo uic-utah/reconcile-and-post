@@ -10,6 +10,8 @@ import sys
 from optparse import OptionParser
 
 import arcpy
+
+from . import config
 from .models import VersionInfo
 
 
@@ -17,13 +19,11 @@ def main():
     '''Main entry point for program. Parse arguments and delegate.
     '''
 
-    base_path = 'C:\\GIS\\ArcGISPro\\Projects\\UIC_GDB_Editing\\'
-    dbo = 'sde'
-    admin_schema = 'UICADMIN'
-    log_path = 'C:\\temp'
+    print(f'Reconcile and Post version: {config.VERSION}{os.linesep}')
 
     parser = OptionParser()
-    parser.set_usage('''
+    parser.set_usage(
+        '''
 Activate the arcgis pro environment
     `activate arcgispro-py3`
 
@@ -31,18 +31,19 @@ Execute the tool as a module
     `python -m rnp --action=all`
     `python -m rnp --action=create`
     `python -m rnp --action=delete`
-    `python -m rnp --action=reconcile`''')
+    `python -m rnp --action=reconcile`'''
+    )
 
     choices = ('all', 'reconcile', 'delete', 'create')
     parser.add_option('-a', '--action', default='all', action='store', choices=choices, help=f'Choose the options from {", ".join(choices)}. Default: all')
-    parser.add_option('-c', '--sde-folder', default=base_path, action='store', dest='base_path', help='The path to the folder containing the sde files')
-    parser.add_option('-s', '--admin-schema', default=admin_schema, action='store', dest='admin_schema', help='The admin for the database. Default: UICAdmin')
-    parser.add_option('-o', '--dbo-schema', default=dbo, action='store', dest='dbo_schema', help='The dbo owner schema. Default: sde')
+    parser.add_option('-c', '--sde-folder', default=config.BASE_PATH, action='store', dest='base_path', help='The path to the folder containing the sde files')
+    parser.add_option('-s', '--admin-schema', default=config.ADMIN_SCHEMA, action='store', dest='admin_schema', help='The admin for the database. Default: UICAdmin')
+    parser.add_option('-o', '--dbo-schema', default=config.DBO, action='store', dest='dbo_schema', help='The dbo owner schema. Default: sde')
 
     (options, _) = parser.parse_args()
 
     admin = VersionInfo(
-        connection=os.path.join(options.base_path, 'Development_DBA_UICADMIN.sde'),
+        connection=os.path.join(options.base_path, config.CONNECTIONS['uic_admin']),
         fully_qualified_version_name=f'{options.dbo_schema}.DEFAULT',
         fully_qualified_rnp_version_name=None,
         reconciles_into=None,
@@ -60,25 +61,25 @@ Execute the tool as a module
         reconciles_into=surrogate.fully_qualified_version_name,
     )
     brianna = VersionInfo(
-        connection=os.path.join(options.base_path, 'Development_DBA_BAriotti.sde'),
+        connection=os.path.join(options.base_path, config.CONNECTIONS['brianna']),
         fully_qualified_version_name='BARIOTTI.UIC_BAriotti',
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_BAriotti',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     candace = VersionInfo(
-        connection=os.path.join(options.base_path, 'Development_DBA_CCady.sde'),
+        connection=os.path.join(options.base_path, config.CONNECTIONS['candace']),
         fully_qualified_version_name='CCADY.UIC_CCady',
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_CCady',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     ryan = VersionInfo(
-        connection=os.path.join(options.base_path, 'Development_DBA_RParker.sde'),
+        connection=os.path.join(options.base_path, config.CONNECTIONS['ryan']),
         fully_qualified_version_name='RPARKER.UIC_RParker',
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_RParker',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
     lenora = VersionInfo(
-        connection=os.path.join(options.base_path, 'Development_DBA_LenoraS.sde'),
+        connection=os.path.join(options.base_path, config.CONNECTIONS['lenora']),
         fully_qualified_version_name='LENORAS.UIC_LenoraS',
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_LenoraS',
         reconciles_into=quality_assurance.fully_qualified_version_name,
@@ -103,7 +104,7 @@ Execute the tool as a module
     ]
 
     if options.action == 'reconcile' or options.action == 'all':
-        reconcile_and_post_versions(reconcile_versions_order, admin.connection, log_path)
+        reconcile_and_post_versions(reconcile_versions_order, admin.connection, config.LOG_PATH)
 
     if options.action == 'delete' or options.action == 'all':
         delete_versions(reconcile_versions_order, admin.connection)
