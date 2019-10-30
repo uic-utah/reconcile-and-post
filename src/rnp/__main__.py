@@ -147,7 +147,7 @@ def reconcile_and_post_versions(versions, admin_connection, log_path):
 
 
 def delete_versions(versions, admin_connection):
-    print(f'deleting {len(versions)} versions')
+    print(f'deleting {sum(version.version_count for version in versions)} versions')
 
     for version in versions:
         version.delete(admin_connection)
@@ -156,7 +156,7 @@ def delete_versions(versions, admin_connection):
 
 
 def create_versions(versions):
-    print(f'creating {len(versions)} versions')
+    print(f'creating {sum(version.version_count for version in versions)} versions')
 
     for version in versions:
         version.create()

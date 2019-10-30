@@ -22,9 +22,11 @@ class VersionInfo():
         self.version_name = _trim_schema(fully_qualified_version_name)
         self.fully_qualified_rnp_version_name = fully_qualified_rnp_version_name
         self.rnp_name = None
+        self.version_count = 1
 
         if fully_qualified_rnp_version_name:
             self.rnp_name = _trim_schema(fully_qualified_rnp_version_name)
+            self.version_count = 2
 
     def reconcile(self, admin_connection, log_path):
         '''reconciles the version into its parent
