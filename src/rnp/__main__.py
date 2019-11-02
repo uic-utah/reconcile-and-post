@@ -147,14 +147,19 @@ def reconcile_and_post_versions(versions, admin_connection, log_path):
 
 
 def delete_versions(versions, admin_connection):
+    print(f'trying to delete {sum(version.version_count for version in versions)} versions. some may not exist')
+
     with arcpy.EnvManager(workspace=admin_connection):
+        print('testing if delete can be run')
+
         has_rnp = len([version for version in arcpy.da.ListVersions(admin_connection) if 'rnp' in version.name.lower()]) > 0
 
         if not has_rnp:
             print('Reconcile and Post versions have not been created. Exiting')
+
             sys.exit(-1)
 
-    print(f'trying to delete {sum(version.version_count for version in versions)} versions. some may not exist')
+    print('checks pass, deleting versions')
 
     for version in versions:
         version.delete(admin_connection)
