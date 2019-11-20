@@ -17,7 +17,8 @@ CONNECTIONS = {
     'brianna': 'Development_DBA_BAriotti.sde',
     'candace': 'Development_DBA_CCady.sde',
     'ryan': 'Development_DBA_RParker.sde',
-    'lenora': 'Development_DBA_LenoraS.sde'
+    'lenora': 'Development_DBA_LenoraS.sde',
+    'dusty': 'Development_DBA_DEarley.sde'
 }
 
 #: path where reconcile logs wil be written
