@@ -84,12 +84,19 @@ Execute the tool as a module
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_LenoraS',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
+    dusty = VersionInfo(
+        connection=os.path.join(options.base_path, config.CONNECTIONS['dusty']),
+        fully_qualified_version_name='DEARLEY.UIC_DEarley',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_DEarley',
+        reconciles_into=quality_assurance.fully_qualified_version_name,
+    )
 
     reconcile_versions_order = [
         candace,
         brianna,
         ryan,
         lenora,
+        dusty,
         quality_assurance,
         surrogate,
     ]
@@ -101,6 +108,7 @@ Execute the tool as a module
         brianna,
         ryan,
         lenora,
+        dusty,
     ]
 
     if options.action == 'reconcile' or options.action == 'all':
