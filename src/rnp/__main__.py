@@ -87,7 +87,7 @@ Execute the tool as a module
     dusty = VersionInfo(
         connection=os.path.join(options.base_path, config.CONNECTIONS['dusty']),
         fully_qualified_version_name='DEARLEY.UIC_DEarley',
-        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_DEarley',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_DEarley',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
 
