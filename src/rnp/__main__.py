@@ -60,43 +60,29 @@ Execute the tool as a module
         fully_qualified_rnp_version_name=None,
         reconciles_into=surrogate.fully_qualified_version_name,
     )
-    brianna = VersionInfo(
-        connection=os.path.join(options.base_path, config.CONNECTIONS['brianna']),
-        fully_qualified_version_name='BARIOTTI.UIC_BAriotti',
-        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_BAriotti',
-        reconciles_into=quality_assurance.fully_qualified_version_name,
-    )
-    candace = VersionInfo(
-        connection=os.path.join(options.base_path, config.CONNECTIONS['candace']),
-        fully_qualified_version_name='CCADY.UIC_CCady',
-        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_CCady',
-        reconciles_into=quality_assurance.fully_qualified_version_name,
-    )
     ryan = VersionInfo(
         connection=os.path.join(options.base_path, config.CONNECTIONS['ryan']),
         fully_qualified_version_name='RPARKER.UIC_RParker',
         fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_RParker',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
-    lenora = VersionInfo(
-        connection=os.path.join(options.base_path, config.CONNECTIONS['lenora']),
-        fully_qualified_version_name='LENORAS.UIC_LenoraS',
-        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_LenoraS',
+    mark = VersionInfo(
+        connection=os.path.join(options.base_path, config.CONNECTIONS['mark']),
+        fully_qualified_version_name='MSTANGER.UIC_MStanger',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_MStanger',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
-    dusty = VersionInfo(
-        connection=os.path.join(options.base_path, config.CONNECTIONS['dusty']),
-        fully_qualified_version_name='DEARLEY.UIC_DEarley',
-        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_DEarley',
+    porter = VersionInfo(
+        connection=os.path.join(options.base_path, config.CONNECTIONS['porter']),
+        fully_qualified_version_name='PHENZE.UIC_PHenze',
+        fully_qualified_rnp_version_name=f'{options.admin_schema}.UIC_RnP_PHenze',
         reconciles_into=quality_assurance.fully_qualified_version_name,
     )
 
     reconcile_versions_order = [
-        candace,
-        brianna,
+        porter,
         ryan,
-        lenora,
-        dusty,
+        mark,
         quality_assurance,
         surrogate,
     ]
@@ -104,13 +90,11 @@ Execute the tool as a module
     create_version_order = [
         surrogate,
         quality_assurance,
-        candace,
-        brianna,
         ryan,
-        lenora,
-        dusty,
+        mark,
+        porter,
     ]
-
+    
     if options.action == 'reconcile' or options.action == 'all':
         reconcile_and_post_versions(reconcile_versions_order, admin.connection, config.LOG_PATH)
 
