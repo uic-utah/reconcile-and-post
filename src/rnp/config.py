@@ -14,11 +14,9 @@ CONNECTIONS = {
     'uic_admin': 'Development_DBA_UICADMIN.sde',
     'surrogate': 'Development_DBA_UICADMIN.sde',
     'quality_assurance': 'Development_DBA_UICADMIN.sde',
-    'brianna': 'Development_DBA_BAriotti.sde',
-    'candace': 'Development_DBA_CCady.sde',
     'ryan': 'Development_DBA_RParker.sde',
-    'lenora': 'Development_DBA_LenoraS.sde',
-    'dusty': 'Development_DBA_DEarley.sde'
+    'mark': 'Development_DBA_MStanger.sde',
+    'porter': 'Development_DBA_PHenze.sde'
 }
 
 #: path where reconcile logs wil be written
